@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Test WebSocket API</title>
+</head>
+<body>
+<h1>Test WebSocket API</h1>
+
+<div id="messages"></div>
+<button id="sendButton">S'abonner a EUR/USD</button>
+
+<script>
+    // Création d'une instance WebSocket
+    const socket = new WebSocket('ws://localhost:8080/ws');
+
+    // Lorsque la connexion WebSocket est établie
+    socket.onopen = function () {
+        console.log('Connexion établie.');
+    };
+
+    // Lorsque le serveur envoie un message
+    socket.onmessage = function (event) {
+        console.log('Message reçu :', event.data);
+
+        // Affichage du message dans la page HTML
+        const messagesDiv = document.getElementById('messages');
+        messagesDiv.innerHTML = '<p>' + event.data + '</p>';
+    };
+
+    const sendButton = document.getElementById('sendButton');
+    sendButton.addEventListener('click', function () {
+        socket.send("EUR/USD");
+    });
+    // Lorsque la connexion WebSocket est fermée
+    socket.onclose = function (event) {
+        console.log('Connexion fermée :', event.code, event.reason);
+    };
+
+</script>
+</body>
+</html>
